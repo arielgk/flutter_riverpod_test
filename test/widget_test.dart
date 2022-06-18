@@ -6,40 +6,12 @@ import 'package:test_state_app/entities/PlayerList.dart';
 import 'package:test_state_app/features/counter/page.dart';
 import 'package:test_state_app/features/players/page.dart';
 
-import 'package:test_state_app/main.dart';
+
 
 final counterProvider = StateProvider((ref) => 0);
-//
-// final playerProvider = StateNotifierProvider<PlayerList, List<Player>>((ref) {
-//   return PlayerList([
-//     Player(
-//         contractUntil: "2020-06-30",
-//         dateOfBirth: "1997-10-31",
-//         jerseyNumber: 19,
-//         name: "Marcus Rashford",
-//         nationality: "England",
-//         position: "Centre-Forward"),
-//
-//   ]);
-// });
 
-final filteredPlayers = FutureProvider((ref) async => <Player>[]);
 
-final playerProvider = StateNotifierProvider<PlayerList, List<Player>>((ref) {
-  return PlayerList([
-    Player(
-        contractUntil: "2020-06-30",
-        dateOfBirth: "1997-10-31",
-        jerseyNumber: 19,
-        name: "Marcus Rashford",
-        nationality: "England",
-        position: "Centre-Forward"),
-  ]);
-});
 
-enum PlayerListFilter {
-  all,
-}
 
 class PlayerRepositoryMock {
   Future<List<Player>> getData() async {
@@ -54,6 +26,13 @@ class PlayerRepositoryMock {
     ];
   }
 }
+
+
+final apiProviderMock = Provider<PlayerRepositoryMock>((ref)=> PlayerRepositoryMock());
+
+final remotePlayerProviderMock = FutureProvider<List<Player>>((ref) async {
+  return ref.read(apiProviderMock).getData();
+});
 
 void main() {
   Widget createWidgetForTesting({required Widget child}) {
@@ -80,27 +59,15 @@ void main() {
   });
 
   testWidgets('override players repositoryProvider', (tester) async {
-    await tester.pumpWidget(ProviderScope(overrides: [
-      filteredPlayers.overrideWithValue(AsyncValue.data([
-        Player(
-            contractUntil: "2020-06-30",
-            dateOfBirth: "1997-10-31",
-            jerseyNumber: 19,
-            name: "Marcus Rashford",
-            position: "Centre-Forward",
-            nationality: "England")
-      ]))
-    ], child: MaterialApp(home: PlayerPage())));
-
     await tester.pumpWidget(ProviderScope(
-        overrides: [],
-        child: ProviderScope(overrides: [], child: PlayerPage())));
+        overrides: [remotePlayerProvider.overrideWithProvider(remotePlayerProviderMock)],
+        child: ProviderScope(overrides: [], child: MaterialApp(home: PlayerPage()))));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.text('Players'), findsOneWidget);
 
-    // expect(find.text('Marcus Rashford'), findsOneWidget);
+    expect(find.text('Marcus Rashford'), findsOneWidget);
   });
 }

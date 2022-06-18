@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import '../entities/Player.dart';
 import 'package:http/http.dart' as http;
 
 class PlayerRepository{
-
 
   Future<List<Player>> getData() async {
     List<Player> list = <Player>[];
@@ -13,10 +14,12 @@ class PlayerRepository{
     if (res.statusCode == 200) {
       var data = json.decode(res.body);
       var rest = data as List;
-      list = rest.map<Player>((json) => Player.fromJson(json)).toList();
+      return rest.map<Player>((json) => Player.fromJson(json)).toList();
+    }else{
+      throw Exception(res.reasonPhrase);
     }
-
-    return list;
   }
-
 }
+
+
+final apiProvider = Provider<PlayerRepository>((ref)=> PlayerRepository());

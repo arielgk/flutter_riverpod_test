@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:test_state_app/entities/Player.dart';
-import 'package:http/http.dart' as http;
-import 'package:test_state_app/repositories/PlayerRepository.dart';
+
 
 
 final counterProvider = StateProvider((ref) => 0);
