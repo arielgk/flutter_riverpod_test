@@ -36,7 +36,6 @@ class PlayerPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final int counter = ref.watch(playerProvider);
     final _data = ref.watch(remotePlayerProvider);
 
     return Scaffold(
