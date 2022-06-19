@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
-Map<String, Player> playerResponseFromJson(String str) => Map.from(json.decode(str)).map((k, v) => MapEntry<String, Player>(k, Player.fromJson(v)));
 
-String feedResponseToJson(Map<String, Player> data) => json.encode(Map.from(data).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())));
 
 @immutable
 class Player {
@@ -34,13 +31,6 @@ class Player {
     position: json["position"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "contractUntil": contractUntil,
-    "dateOfBirth": dateOfBirth,
-    "jerseyNumber": jerseyNumber,
-    "name": name,
-    "nationality": nationality,
-    "position": position,
-  };
+
 }
 

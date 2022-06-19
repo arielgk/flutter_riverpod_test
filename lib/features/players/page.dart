@@ -9,7 +9,6 @@ final remotePlayerProvider = FutureProvider<List<Player>>((ref) async {
   return ref.read(apiProvider).getData();
 });
 
-final playerListFilter = StateProvider((_) => Filter.all);
 
 
 
@@ -20,11 +19,11 @@ class Title extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text(
       'Players',
-      textAlign: TextAlign.center,
+      textAlign: TextAlign.left,
       style: TextStyle(
-        color: Color.fromARGB(38, 47, 47, 247),
-        fontSize: 100,
-        fontWeight: FontWeight.w100,
+        color: Color.fromARGB(255, 255, 255, 255),
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
         fontFamily: 'Helvetica Neue',
       ),
     );
@@ -40,7 +39,7 @@ class PlayerPage extends ConsumerWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Players'),
+          title: const Title(),
         ),
         body: _data.when(
             data: (_data) {

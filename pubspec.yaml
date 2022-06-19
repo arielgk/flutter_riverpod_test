@@ -37,6 +37,7 @@ dependencies:
   flutter_hooks: ^0.18.5
   hooks_riverpod: ^1.0.4
   http: ^0.13.4
+  mockito: ^5.2.0
 
 dev_dependencies:
   flutter_test:
